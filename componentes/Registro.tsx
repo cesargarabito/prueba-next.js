@@ -16,7 +16,7 @@ const defaultFormFields = {
   isAdmin: false 
 }
 
-const Registro = () => {
+const Registro = (props: any) => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const {displayName, email, password, confirmPassword, displayLastname, phone, birthDate, isAdmin } = formFields;
   
@@ -56,20 +56,28 @@ const Registro = () => {
 
   return (
     <div className="container mx-auto max-w-sm">
-      <h2 className="text-2xl font-bold mb-4">¿Aún no tienes una cuenta?</h2>
-      <h5 className="text-lg mb-4">Regístrate y empieza a ver contenido ya!</h5>
+      {props.userDataUpdate ?  
+      
+      (
+      <div><h2 className="text-2xl font-bold mb-4">Actualiza tus datos</h2>
+      </div>
+      ) : (
+        <div><h2 className="text-2xl font-bold mb-4">¿Aún no tienes una cuenta?</h2>
+      <h5 className="text-lg mb-4">Regístrate y empieza a ver contenido ya!</h5></div>
+      )
+}
       <form onSubmit={handleSubmit}>
       <input
         className="w-full px-4 py-2 mb-4 border rounded"
         type="email"
         placeholder="Correo electrónico"
-        value={email}
+        value={props.userDataUpdate?.email || email}
         onChange={handleChange}
         name='email'
         pattern=".{0,100}"
         title="El correo electrónico debe tener máximo 100 caracteres."
       />
-      <input
+      {!props.userDataUpdate ? <><input
         className="w-full px-4 py-2 mb-4 border rounded"
         type="password"
         placeholder="Contraseña"
@@ -89,6 +97,10 @@ const Registro = () => {
         name='confirmPassword'
         required
       />
+       </>: <></>
+      }
+      
+      
       <input
         className="w-full px-4 py-2 mb-4 border rounded"
         type="text"
@@ -141,12 +153,21 @@ const Registro = () => {
         />
         <label>Registrarse como administrador</label>
       </div>
-      <button
+      {props.userDataUpdate ? <button
         className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
          type='submit'
-      >
-        Registrarse
-      </button>
+      >Actualizar
+      </button> :
+      <button
+      className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+       type='submit'
+    >
+      Registrarse
+    </button>
+    }
+      
+        
+      
       </form>
     </div>
   );

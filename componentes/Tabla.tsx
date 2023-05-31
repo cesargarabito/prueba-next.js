@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { deleteUser, getUsers } from './firebaseConfig';
+import { deleteUser, getUsers, updateUserDB } from './firebaseConfig';
 import Registro from './Registro';
 
 
 const UserTable = () => {
 const [usersDB, setUsersDB] = useState<any[]>([]);
+const [showRegistro, setShowRegistro] = useState(false);
+const [userToUpdate, setUserToUpdate] = useState({});
     const handleUsers = async () => {
         try {
             const users = await getUsers();
@@ -20,10 +22,15 @@ const [usersDB, setUsersDB] = useState<any[]>([]);
     handleUsers();
    }
    const mostrarRegistro = (userData: any) => {
-    if(userData) {
-        
+    setShowRegistro(true);
+    setUserToUpdate(userData);
+
     }
-   }
+    const updateUserData = async (idUser: any) => {
+        await updateUserDB(idUser, );
+        handleUsers();
+    }
+   
 
 
     useEffect(() => {
@@ -47,6 +54,7 @@ const filteredUsers = usersDB.filter((user) =>
     <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
         <div> 
         <input 
+        placeholder='Buscar por nombre'
         value={searchTerm} 
         className="w-full px-4 py-2 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6"
         type="text" onChange={(e) => setSearchTerm(e.target.value)} />
@@ -98,8 +106,8 @@ const filteredUsers = usersDB.filter((user) =>
            
           </tbody>
         </table>
-        {}
-        <Registro />
+        {showRegistro && <Registro userDataUpdate={userToUpdate}/>}
+        
       </div>
     </div>
   </div>

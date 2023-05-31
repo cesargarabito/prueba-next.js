@@ -90,6 +90,6 @@ export const deleteUser = async (id) => {
   await deleteDoc(doc(db, 'users', id))
 }
 
-export const updateUser = async (id, displayName) => {
+export const updateUserDB = async (id, displayName) => {
   await updateUser(doc(db, 'users', id), {displayName})
 }
