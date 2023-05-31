@@ -7,32 +7,24 @@ import {store} from '../store/store'
 import { onAuthStateChangedListener, createUserDocumentFromAuth } from '@/componentes/firebaseConfig';
 import { useEffect } from 'react';
 import { setCurrentUser } from '../store/userAction';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Acceso from '@/componentes/Acceso';
+import Bienvenida from '@/componentes/Bienvenida';
 
 
 
 export default function Home() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChangedListener((user: any) => {
-      if (user) {
-        createUserDocumentFromAuth(user);
-      }
-
-      dispatch(setCurrentUser(user));
-    });
-
-    return unsubscribe;
-  }, [dispatch]);
+  
   return (
     <Provider store={store}>
-    <div className="flex flex-col items-center mt-8">
-      <h1 className="text-4xl font-bold mb-4">Bienvenido/a a la aplicación</h1>
-      <div className="w-full max-w-lg bg-gray-200 p-4 rounded-lg flex justify-center gap-12">
-        <Login />
-        <Registro />
-      </div>
-    </div>
+       <Router>
+        <Routes>
+          <Route path="/" element={<Acceso />} />
+          <Route path="/Bienvenida" element={<Bienvenida />} />
+          
+        </Routes>
+      </Router>
+    
     </Provider>
   );
 };

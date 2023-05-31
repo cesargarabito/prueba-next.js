@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
-import { createUserDocumentFromAuth, signInWithGooglePopup, signInUserAuthWithEmailAndPassword } from './firebaseConfig';
+import { createUserDocumentFromAuth, signInWithGooglePopup, signInUserAuthWithEmailAndPassword, onAuthStateChangedListener } from './firebaseConfig';
 import Swal from 'sweetalert2';
+import { useDispatch } from 'react-redux';
+import { setCurrentUser } from '@/store/userAction';
+import { useNavigate } from "react-router-dom";
 
 const defaultFormFields = {
   
@@ -10,6 +13,20 @@ const defaultFormFields = {
 }
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChangedListener((user: any) => {
+      if (user) {
+        createUserDocumentFromAuth(user);
+      }
+
+      dispatch(setCurrentUser(user));
+    });
+
+    return unsubscribe;
+  }, [dispatch]);
     // const logGoogleUser = async () => {
     //     const { user } = await signInWithGooglePopup();
     //     createUserDocumentFromAuth(user);
@@ -28,6 +45,9 @@ const Login = () => {
       console.log(response);
       resetFormFields();
       Swal.fire('Enhorabuena', 'Te has logueado correctamente' ,'success');
+      if(response?.user){
+        navigate('/Bienvenida');
+      }
     } catch (error: any) {
       if(error.code === 'auth/user-not-found' || error.code === 'wrong-password'){
         Swal.fire('Error de acceso', 'Usuario no registrado/contrasena incorrecta', 'error')

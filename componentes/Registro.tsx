@@ -26,8 +26,8 @@ const Registro = () => {
       return;
     }
     try {
-      const {user} = await createUserAuthWithEmailAndPassword(email, password);
-      await createUserDocumentFromAuth(user, {displayName});
+      const response = await createUserAuthWithEmailAndPassword(email, password);
+      await createUserDocumentFromAuth(response?.user, {displayName});
       resetFormFields();
       Swal.fire('Registro exitoso', 'El usuario se ha registrado correctamente', 'success');
     } catch (error: any) {
