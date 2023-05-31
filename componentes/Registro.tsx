@@ -9,13 +9,17 @@ const defaultFormFields = {
   displayName: '',
   email: '',
   password: '',
-  confirmPassword: ''
+  confirmPassword: '',
+  displayLastname: '',
+  phone: '',
+  birthDate: '',
+  isAdmin: false 
 }
 
 const Registro = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
-  const {displayName, email, password, confirmPassword } = formFields;
-  console.log(formFields);
+  const {displayName, email, password, confirmPassword, displayLastname, phone, birthDate, isAdmin } = formFields;
+  
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
   }
@@ -27,7 +31,7 @@ const Registro = () => {
     }
     try {
       const response = await createUserAuthWithEmailAndPassword(email, password);
-      await createUserDocumentFromAuth(response?.user, {displayName});
+      await createUserDocumentFromAuth(response?.user, {displayName, displayLastname, phone, birthDate, isAdmin });
       resetFormFields();
       Swal.fire('Registro exitoso', 'El usuario se ha registrado correctamente', 'success');
     } catch (error: any) {
@@ -43,72 +47,12 @@ const Registro = () => {
     const { name, value } = event.target;
     setFormFields({...formFields, [name]: value})
   }
-  const [nombre, setNombre] = useState('');
-  const [apellidos, setApellidos] = useState('');
-  const [telefono, setTelefono] = useState('');
-  const [fechaNacimiento, setFechaNacimiento] = useState('');
+
   const [esAdmin, setEsAdmin] = useState(false);
 
-  useEffect(() => {
-    // Este efecto se ejecutará solo en el lado del cliente
-    // Aquí puedes realizar cualquier acción específica del cliente, como manipulación del DOM o llamadas a API.
-  }, []);
-
-  // const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setEmail(e.target.value);
-  // };
-
-  // const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setPassword(e.target.value);
-  // };
-
-  // const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setConfirmPassword(e.target.value);
-  // };
-
-  const handleNombreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNombre(e.target.value);
-  };
-
-  const handleApellidosChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setApellidos(e.target.value);
-  };
-
-  const handleTelefonoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTelefono(e.target.value);
-  };
-
-  const handleFechaNacimientoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFechaNacimiento(e.target.value);
-  };
-
-  const handleEsAdminChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEsAdmin(e.target.checked);
-  };
-
-  const handleRegistro = () => {
-    // Verifica que las contraseñas coincidan
-    if (password !== confirmPassword) {
-      console.log('Las contraseñas no coinciden');
-      return;
-    }
   
-    // Registra al usuario con su correo electrónico y contraseña
-//     firebase
-//       .auth()
-//       .createUserWithEmailAndPassword(email, password)
-//       .then((userCredential: { user: any; }) => {
-//         // Usuario registrado exitosamente
-//         const user = userCredential.user;
-//         console.log('Usuario registrado:', user.uid);
-//         // Aquí puedes realizar otras acciones después del registro, como guardar datos adicionales del usuario en Firestore
-//       })
-//       .catch((error: { message: any; }) => {
-//         // Ocurrió un error durante el registro
-//         console.log('Error al registrar usuario:', error.message);
-//       });
- };
   
+    
 
   return (
     <div className="container mx-auto max-w-sm">
@@ -122,6 +66,8 @@ const Registro = () => {
         value={email}
         onChange={handleChange}
         name='email'
+        pattern=".{0,100}"
+        title="El correo electrónico debe tener máximo 100 caracteres."
       />
       <input
         className="w-full px-4 py-2 mb-4 border rounded"
@@ -130,6 +76,9 @@ const Registro = () => {
         value={password}
         onChange={handleChange}
         name='password'
+        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,50}"
+        required
+        title="La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un dígito y tener entre 8 y 50 caracteres."
       />
       <input
         className="w-full px-4 py-2 mb-4 border rounded"
@@ -138,6 +87,7 @@ const Registro = () => {
         value={confirmPassword}
         onChange={handleChange}
         name='confirmPassword'
+        required
       />
       <input
         className="w-full px-4 py-2 mb-4 border rounded"
@@ -153,37 +103,47 @@ const Registro = () => {
         className="w-full px-4 py-2 mb-4 border rounded"
         type="text"
         placeholder="Apellidos"
-        value={apellidos}
-        onChange={handleApellidosChange}
+        value={displayLastname}
+        onChange={handleChange}
         pattern=".{3,100}"
         required
+        name='displayLastname'
       />
       <input
         className="w-full px-4 py-2 mb-4 border rounded"
         type="text"
         placeholder="Número de teléfono"
-        value={telefono}
-        onChange={handleTelefonoChange}
+        value={phone}
+        onChange={handleChange}
+        name='phone'
+        pattern="[0-9]{9}"
+        title="Debe ingresar un número de teléfono válido de 9 dígitos."
+        required
       />
       <input
         className="w-full px-4 py-2 mb-4 border rounded"
         type="text"
         placeholder="Fecha de nacimiento"
-        value={fechaNacimiento}
-        onChange={handleFechaNacimientoChange}
+        value={birthDate}
+        onChange={handleChange}
+        name='birthDate'
+        required
+        pattern="\d{2}/\d{2}/\d{4}"
+        title="Formato de fecha no válido. Utilice el formato dd/mm/yyyy."
       />
       <div className="flex items-center mb-4">
         <input
           type="radio"
           className="mr-2"
-          checked={esAdmin}
-          onChange={handleEsAdminChange}
+          checked={isAdmin}
+          onChange={handleChange}
+          name='isAdmin'
         />
         <label>Registrarse como administrador</label>
       </div>
       <button
         className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-        onClick={handleRegistro} type='submit'
+         type='submit'
       >
         Registrarse
       </button>

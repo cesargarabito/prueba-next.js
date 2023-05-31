@@ -86,7 +86,8 @@ const Login = () => {
       />
       <button
         className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-        //onClick={handleLogin}
+        //onClick={handleLogin} 
+        type='submit'
       >
         Iniciar sesión
       </button>

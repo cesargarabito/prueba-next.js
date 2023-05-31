@@ -1,3 +1,6 @@
+import Tabla from './Tabla'
+
+
 const Bienvenida = () => {
     // Obtén la lista de usuarios desde el estado de Redux
     //const users = useSelector(state => state.users);
@@ -5,8 +8,9 @@ const Bienvenida = () => {
     return (
       <div>
         <h1>Usuarios</h1>
+        <Tabla />
         <ul>
-            holiii
+            
           {/* {users.map(user => (
             <li key={user.id}>{user.name}</li>
           ))} */}
