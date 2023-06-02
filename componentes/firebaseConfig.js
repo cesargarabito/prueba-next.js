@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import 'firebase/auth';
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged} from 'firebase/auth';
-import { getFirestore, doc, getDoc, setDoc, collection, getDocs, deleteDoc } from 'firebase/firestore'
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs, deleteDoc, updateDoc, addDoc } from 'firebase/firestore'
 
 
 const firebaseConfig = {
@@ -90,6 +90,10 @@ export const deleteUser = async (id) => {
   await deleteDoc(doc(db, 'users', id))
 }
 
-export const updateUserDB = async (id, displayName) => {
-  await updateUser(doc(db, 'users', id), {displayName})
+export const updateUserDB = async (id, displayName, displayLastname, email, phone, birthDate, isAdmin) => {
+  await updateDoc(doc(db, 'users', id), {displayName, displayLastname, email, phone, birthDate, isAdmin})
+}
+
+export const saveUserDB = (displayName, displayLastname, phone, birthDate, isAdmin, email) => {
+  addDoc(collection(db, 'users'), {displayName, displayLastname, phone, birthDate, isAdmin, email})
 }

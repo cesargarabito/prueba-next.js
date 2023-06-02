@@ -17,6 +17,8 @@ const defaultFormFields = {
 }
 
 const Registro = (props: any) => {
+  //const [updatedUserData, setUpdatedUserData] = useState({});
+
   const [formFields, setFormFields] = useState(defaultFormFields);
   const {displayName, email, password, confirmPassword, displayLastname, phone, birthDate, isAdmin } = formFields;
   
@@ -155,7 +157,7 @@ const Registro = (props: any) => {
       </div>
       {props.userDataUpdate ? <button
         className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-         type='submit'
+         type='submit' onClick={props.updatedUserData}
       >Actualizar
       </button> :
       <button
