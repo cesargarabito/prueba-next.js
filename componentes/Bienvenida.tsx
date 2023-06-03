@@ -1,23 +1,13 @@
-import Tabla from './Tabla'
-
+import React from "react";
+import Tabla from "./Tabla";
 
 const Bienvenida = () => {
-    // Obtén la lista de usuarios desde el estado de Redux
-    //const users = useSelector(state => state.users);
-  
-    return (
-      <div>
-        <h1>Usuarios</h1>
-        <Tabla />
-        <ul>
-            
-          {/* {users.map(user => (
-            <li key={user.id}>{user.name}</li>
-          ))} */}
-        </ul>
-      </div>
-    );
-  };
-  
-  export default Bienvenida;
-  
+  return (
+    <div className="container mx-auto p-4">
+      <h1 className="text-4xl font-bold text-gray-900 mb-4">Usuarios</h1>
+      <Tabla />
+    </div>
+  );
+};
+
+export default Bienvenida;

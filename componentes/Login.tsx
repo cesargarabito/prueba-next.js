@@ -42,7 +42,6 @@ const Login = () => {
     
     try {
       const response = await signInUserAuthWithEmailAndPassword(email, password);
-      console.log(response);
       resetFormFields();
       Swal.fire('Enhorabuena', 'Te has logueado correctamente' ,'success');
       if(response?.user){
