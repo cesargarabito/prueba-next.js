@@ -1,7 +1,4 @@
-import { useState, useEffect } from "react";
-//import firebase from './firebaseConfig';
-// Importa tu archivo de configuración de Firebase
-//import 'firebase/auth'; // Importa el módulo de autenticación
+import { useState } from "react";
 import {
   createUserAuthWithEmailAndPassword,
   createUserDocumentFromAuth,
@@ -20,7 +17,6 @@ const defaultFormFields = {
 };
 
 const Registro = (props: any) => {
-  //const [updatedUserData, setUpdatedUserData] = useState({});
 
   const [formFields, setFormFields] = useState(defaultFormFields);
   const {
@@ -78,15 +74,11 @@ const Registro = (props: any) => {
     setFormFields({ ...formFields, [name]: value });
   };
 
-  //const [esAdmin, setEsAdmin] = useState(false);
+  
 
   return (
     <div className="container mx-auto max-w-sm">
-      {props.userDataUpdate ? (
-        <div>
-          <h2 className="text-2xl font-bold mb-4">Actualiza tus datos</h2>
-        </div>
-      ) : (
+  
         <div>
           <h2 className="text-2xl font-bold mb-4">
             ¿Aún no tienes una cuenta?
@@ -95,7 +87,7 @@ const Registro = (props: any) => {
             Regístrate y empieza a ver contenido ya!
           </h5>
         </div>
-      )}
+      
       <form onSubmit={handleSubmit}>
         <input
           className="w-full px-4 py-2 mb-4 border rounded"
@@ -107,8 +99,8 @@ const Registro = (props: any) => {
           pattern=".{0,100}"
           title="El correo electrónico debe tener máximo 100 caracteres."
         />
-        {!props.userDataUpdate ? (
-          <>
+        
+          
             <input
               className="w-full px-4 py-2 mb-4 border rounded"
               type="password"
@@ -129,10 +121,7 @@ const Registro = (props: any) => {
               name="confirmPassword"
               required
             />
-          </>
-        ) : (
-          <></>
-        )}
+        
 
         <input
           className="w-full px-4 py-2 mb-4 border rounded"
@@ -167,7 +156,7 @@ const Registro = (props: any) => {
         />
         <input
           className="w-full px-4 py-2 mb-4 border rounded"
-          type="text"
+          type="date"
           placeholder="Fecha de nacimiento"
           value={birthDate}
           onChange={handleChange}
@@ -186,22 +175,13 @@ const Registro = (props: any) => {
           />
           <label>Registrarse como administrador</label>
         </div>
-        {props.userDataUpdate ? (
-          <button
-            className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-            type="submit"
-            onClick={props.updatedUserData}
-          >
-            Actualizar
-          </button>
-        ) : (
           <button
             className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
             type="submit"
           >
             Registrarse
           </button>
-        )}
+        
       </form>
     </div>
   );

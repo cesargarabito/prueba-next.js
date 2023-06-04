@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import {
-  createUserDocumentFromAuth,
   deleteUser,
   getUserData,
   getUsers,
-  onAuthStateChangedListener,
   saveUserDB,
+  signOutUser,
   updateUserDB,
 } from "./firebaseConfig";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setCurrentUser } from "@/store/userAction";
+import { useSelector } from "react-redux";
+import { IoMdTrash } from "react-icons/io";
+import { AiOutlineEdit } from "react-icons/ai";
+
+import { selectCurrentUser } from "../store/userSelector";
+import Swal from "sweetalert2";
 
 const UserTable = () => {
   const [usersDB, setUsersDB] = useState<any[]>([]);
@@ -42,9 +45,26 @@ const UserTable = () => {
       console.log(error);
     }
   };
+
   const removeUser = async (idUser: any) => {
-    await deleteUser(idUser);
-    handleUsers();
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará permanentemente al usuario.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar",
+      customClass: {
+        confirmButton: "mr-2",
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteUser(idUser);
+        handleUsers();
+      }
+    });
   };
 
   const updateUserData = async (
@@ -81,23 +101,18 @@ const UserTable = () => {
   useEffect(() => {
     handleUsers();
   }, []);
-  const dispatch = useDispatch();
-  //   const navigate = useNavigate();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChangedListener(async (user: any) => {
-      if (user) {
-        createUserDocumentFromAuth(user);
-      }
-      const userData = await getUserData(user.uid);
+  const currentUser = useSelector(selectCurrentUser);
+
+  getUserData(currentUser.uid)
+    .then((userData) => {
+      console.log("value=", userData);
       setIsAdminDB(userData);
-      //console.log('value==', userData);
-      dispatch(setCurrentUser(user));
+    })
+    .catch((error) => {
+      console.error(error);
     });
-
-    return unsubscribe;
-  }, [dispatch]);
-
+  console.log("isadmindb", isAdminDB);
   const filteredUsers = usersDB
     .filter(
       (user) =>
@@ -155,7 +170,10 @@ const UserTable = () => {
 
         <button
           className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded focus:outline-none hover:bg-red-600"
-          onClick={() => navigate("/")}
+          onClick={() => {
+            signOutUser();
+            navigate("/");
+          }}
         >
           Salir
         </button>
@@ -181,8 +199,11 @@ const UserTable = () => {
                         </span>
                       </button>
                     </div>
+                    <form>
                     <div className="relative p-6 flex-auto">
                       <input
+                        pattern=".{3,100}"
+                        required
                         type="text"
                         placeholder="Nombre"
                         value={userName}
@@ -191,6 +212,8 @@ const UserTable = () => {
                       />
 
                       <input
+                        pattern=".{3,100}"
+                        required
                         type="text"
                         placeholder="Apellido"
                         value={lastname}
@@ -204,9 +227,15 @@ const UserTable = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        pattern=".{0,100}"
+                        title="El correo electrónico debe tener máximo 100 caracteres."
+                        required
                       />
 
                       <input
+                        pattern="[0-9]{9}"
+                        title="Debe ingresar un número de teléfono válido de 9 dígitos."
+                        required
                         type="text"
                         placeholder="Teléfono"
                         value={phone}
@@ -215,7 +244,8 @@ const UserTable = () => {
                       />
 
                       <input
-                        type="text"
+                        required
+                        type="date"
                         placeholder="Fecha de nacimiento"
                         value={birthDate}
                         onChange={(e) => setBirthDate(e.target.value)}
@@ -232,6 +262,7 @@ const UserTable = () => {
                         Administrador
                       </label>
                     </div>
+                    </form>
                     <div className="flex items-center justify-end p-6 border-t border-solid rounded-b">
                       <button
                         className="px-6 py-2 mr-4 text-sm font-medium text-red-500 uppercase bg-transparent border border-red-500 rounded outline-none hover:bg-red-500 hover:text-white focus:outline-none"
@@ -241,7 +272,7 @@ const UserTable = () => {
                       </button>
                       <button
                         className="px-6 py-2 text-sm font-medium text-green-500 uppercase bg-transparent border border-green-500 rounded outline-none hover:bg-green-500 hover:text-white focus:outline-none"
-                        onClick={saveUser}
+                        onClick={saveUser} type="submit"
                       >
                         Guardar
                       </button>
@@ -276,8 +307,12 @@ const UserTable = () => {
                         value={updateUserName}
                         onChange={(e) => setUpdateUserName(e.target.value)}
                         className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        pattern=".{3,100}"
+                        required
                       />
                       <input
+                        pattern=".{3,100}"
+                        required
                         type="text"
                         placeholder="Apellido"
                         value={updateLastname}
@@ -290,9 +325,15 @@ const UserTable = () => {
                         value={updateEmail}
                         onChange={(e) => setUpdateEmail(e.target.value)}
                         className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        pattern=".{0,100}"
+                        title="El correo electrónico debe tener máximo 100 caracteres."
+                        required
                       />
 
                       <input
+                        pattern="[0-9]{9}"
+                        title="Debe ingresar un número de teléfono válido de 9 dígitos."
+                        required
                         type="text"
                         placeholder="Teléfono"
                         value={updatePhone}
@@ -301,6 +342,9 @@ const UserTable = () => {
                       />
 
                       <input
+                        required
+                        pattern="\d{2}/\d{2}/\d{4}"
+                        title="Formato de fecha no válido. Utilice el formato dd/mm/yyyy."
                         type="date"
                         placeholder="Fecha de nacimiento"
                         value={updateBirthDate}
@@ -385,8 +429,12 @@ const UserTable = () => {
                       key={user.id}
                       className="border-b dark:border-neutral-500"
                     >
-                      <td className="whitespace-nowrap px-6 py-4">
-                        {user.isAdmin}
+                      <td className="whitespace-nowrap px-6 py-4 flex justify-center items-center">
+                        {user.isAdmin === "on" ? (
+                          <input type="radio" checked />
+                        ) : (
+                          <input type="radio" />
+                        )}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
                         {user.displayName}
@@ -403,26 +451,35 @@ const UserTable = () => {
                       <td className="whitespace-nowrap px-6 py-4">
                         {user.birthDate}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
+
+                      <td className="whitespace-nowrap px-6 py-4 flex justify-center items-center">
                         {isAdminDB ? (
-                          <button
-                            onClick={() => {
-                              removeUser(user.id);
-                            }}
-                          >
-                            Eliminar
-                          </button>
-                        ) : (
-                          ""
-                        )}
-                        {isAdminDB ? (
-                          <button
-                            onClick={() => {
-                              openModal(user.id);
-                            }}
-                          >
-                            Modificar
-                          </button>
+                          <>
+                            <button
+                              onClick={() => {
+                                removeUser(user.id);
+                              }}
+                              className={`mr-2 p-2 ${
+                                isAdminDB
+                                  ? "bg-red-500 text-white"
+                                  : "bg-gray-300 text-gray-500"
+                              }`}
+                            >
+                              <IoMdTrash />
+                            </button>
+                            <button
+                              onClick={() => {
+                                openModal(user.id);
+                              }}
+                              className={`p-2 ${
+                                isAdminDB
+                                  ? "bg-blue-500 text-white"
+                                  : "bg-gray-300 text-gray-500"
+                              }`}
+                            >
+                              <AiOutlineEdit />
+                            </button>
+                          </>
                         ) : (
                           ""
                         )}
