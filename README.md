@@ -1,34 +1,55 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Empezando
+Primero, ejecuta el servidor de desarrollo:
 
-## Getting Started
-
-First, run the development server:
-
-```bash
+bash
+Copy code
 npm run dev
-# or
+
+# o
+
 yarn dev
-# or
+
+# o
+
 pnpm dev
-```
+Abre http://localhost:3000 en tu navegador para ver el resultado.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Este proyecto utiliza next/font para optimizar y cargar automáticamente Inter, una fuente personalizada de Google.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+A continuación, les proporciono la lista de dependencias necesarias para ejecutar correctamente la aplicación:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+"dependencies": {
+"@reduxjs/toolkit": "^1.9.5",
+"@types/node": "20.2.5",
+"@types/react": "18.2.7",
+"@types/react-dom": "18.2.4",
+"autoprefixer": "10.4.14",
+"eslint": "8.41.0",
+"eslint-config-next": "13.4.4",
+"firebase": "^9.22.1",
+"firebase-admin": "^11.9.0",
+"next": "13.4.4",
+"postcss": "8.4.24",
+"react": "18.2.0",
+"react-dom": "18.2.0",
+"react-icons": "^4.9.0",
+"react-paginate": "^8.2.0",
+"react-redux": "^8.0.5",
+"react-router-dom": "^6.11.2",
+"redux": "^4.2.1",
+"redux-logger": "^3.0.6",
+"redux-thunk": "^2.4.2",
+"sweetalert2": "^11.7.9",
+"tailwindcss": "3.3.2",
+"typescript": "5.0.4"
+},
+"devDependencies": {
+"jest": "^29.5.0"
+}
 
-## Learn More
+Asegúrense de instalar estas dependencias antes de ejecutar la aplicación para evitar cualquier problema relacionado con la falta de paquetes requeridos.
 
-To learn more about Next.js, take a look at the following resources:
+Si tienen alguna pregunta o necesitan ayuda adicional, no duden en comunicarse conmigo.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+¡Gracias y que tengan un buen día!
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

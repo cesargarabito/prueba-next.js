@@ -117,7 +117,8 @@ export const updateUserDB = async (
   email,
   phone,
   birthDate,
-  isAdmin
+  isAdmin,
+  comment
 ) => {
   await updateDoc(doc(db, "users", id), {
     displayName,
@@ -126,6 +127,7 @@ export const updateUserDB = async (
     phone,
     birthDate,
     isAdmin,
+    comment
   });
 };
 
@@ -169,3 +171,5 @@ export const getUserData = async (uid) => {
     console.log("Error al obtener los datos del usuario:", error);
   }
 };
+
+

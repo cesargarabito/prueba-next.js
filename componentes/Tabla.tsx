@@ -16,6 +16,8 @@ import { selectCurrentUser } from "../store/userSelector";
 import Swal from "sweetalert2";
 
 const UserTable = () => {
+  const [isFormComplete, setIsFormComplete] = useState(false);
+
   const [usersDB, setUsersDB] = useState<any[]>([]);
   const [userName, setUserName] = useState("");
   const [updateUserName, setUpdateUserName] = useState("");
@@ -34,6 +36,7 @@ const UserTable = () => {
   const [updatePhone, setUpdatePhone] = useState("");
   const [updateBirthDate, setUpdateBirthDate] = useState("");
   const [updateIsAdmin, setUpdateIsAdmin] = useState(false);
+  const [updateComment, setUpdateComment] = useState("");
   const [isAdminDB, setIsAdminDB] = useState(false);
 
   const navigate = useNavigate();
@@ -44,6 +47,17 @@ const UserTable = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+  const checkFormCompletion = () => {
+    const isComplete =
+      updateUserName &&
+      updateLastname &&
+      updateEmail &&
+      updatePhone &&
+      updateBirthDate &&
+      updateComment;
+
+    setIsFormComplete(!!isComplete);
   };
 
   const removeUser = async (idUser: any) => {
@@ -74,7 +88,8 @@ const UserTable = () => {
     updateEmail: any,
     updateBirthDate: any,
     updateIsAdmin: any,
-    updatePhone: any
+    updatePhone: any,
+    updateComment: string
   ) => {
     await updateUserDB(
       userID,
@@ -83,7 +98,8 @@ const UserTable = () => {
       updateEmail,
       updateBirthDate,
       updateIsAdmin,
-      updatePhone
+      updatePhone,
+      updateComment
     );
     handleUsers();
     setShowModal(false);
@@ -200,68 +216,68 @@ const UserTable = () => {
                       </button>
                     </div>
                     <form>
-                    <div className="relative p-6 flex-auto">
-                      <input
-                        pattern=".{3,100}"
-                        required
-                        type="text"
-                        placeholder="Nombre"
-                        value={userName}
-                        onChange={(e) => setUserName(e.target.value)}
-                        className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-
-                      <input
-                        pattern=".{3,100}"
-                        required
-                        type="text"
-                        placeholder="Apellido"
-                        value={lastname}
-                        onChange={(e) => setLastname(e.target.value)}
-                        className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-
-                      <input
-                        type="text"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        pattern=".{0,100}"
-                        title="El correo electrónico debe tener máximo 100 caracteres."
-                        required
-                      />
-
-                      <input
-                        pattern="[0-9]{9}"
-                        title="Debe ingresar un número de teléfono válido de 9 dígitos."
-                        required
-                        type="text"
-                        placeholder="Teléfono"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-
-                      <input
-                        required
-                        type="date"
-                        placeholder="Fecha de nacimiento"
-                        value={birthDate}
-                        onChange={(e) => setBirthDate(e.target.value)}
-                        className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-
-                      <label className="flex items-center">
+                      <div className="relative p-6 flex-auto">
                         <input
-                          type="checkbox"
-                          checked={isAdmin}
-                          onChange={(e) => setIsAdmin(e.target.checked)}
-                          className="mr-2"
+                          pattern=".{3,100}"
+                          required
+                          type="text"
+                          placeholder="Nombre"
+                          value={userName}
+                          onChange={(e) => setUserName(e.target.value)}
+                          className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
-                        Administrador
-                      </label>
-                    </div>
+
+                        <input
+                          pattern=".{3,100}"
+                          required
+                          type="text"
+                          placeholder="Apellido"
+                          value={lastname}
+                          onChange={(e) => setLastname(e.target.value)}
+                          className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+
+                        <input
+                          type="text"
+                          placeholder="Email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          pattern=".{0,100}"
+                          title="El correo electrónico debe tener máximo 100 caracteres."
+                          required
+                        />
+
+                        <input
+                          pattern="[0-9]{9}"
+                          title="Debe ingresar un número de teléfono válido de 9 dígitos."
+                          required
+                          type="text"
+                          placeholder="Teléfono"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+
+                        <input
+                          required
+                          type="date"
+                          placeholder="Fecha de nacimiento"
+                          value={birthDate}
+                          onChange={(e) => setBirthDate(e.target.value)}
+                          className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={isAdmin}
+                            onChange={(e) => setIsAdmin(e.target.checked)}
+                            className="mr-2"
+                          />
+                          Administrador
+                        </label>
+                      </div>
                     </form>
                     <div className="flex items-center justify-end p-6 border-t border-solid rounded-b">
                       <button
@@ -272,7 +288,8 @@ const UserTable = () => {
                       </button>
                       <button
                         className="px-6 py-2 text-sm font-medium text-green-500 uppercase bg-transparent border border-green-500 rounded outline-none hover:bg-green-500 hover:text-white focus:outline-none"
-                        onClick={saveUser} type="submit"
+                        onClick={saveUser}
+                        type="submit"
                       >
                         Guardar
                       </button>
@@ -305,7 +322,10 @@ const UserTable = () => {
                         type="text"
                         placeholder="Nombre"
                         value={updateUserName}
-                        onChange={(e) => setUpdateUserName(e.target.value)}
+                        onChange={(e) => {
+                          setUpdateUserName(e.target.value);
+                          checkFormCompletion();
+                        }}
                         className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                         pattern=".{3,100}"
                         required
@@ -316,14 +336,20 @@ const UserTable = () => {
                         type="text"
                         placeholder="Apellido"
                         value={updateLastname}
-                        onChange={(e) => setUpdateLastname(e.target.value)}
+                        onChange={(e) => {
+                          setUpdateLastname(e.target.value);
+                          checkFormCompletion();
+                        }}
                         className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                       <input
                         type="email"
                         placeholder="Email"
                         value={updateEmail}
-                        onChange={(e) => setUpdateEmail(e.target.value)}
+                        onChange={(e) => {
+                          setUpdateEmail(e.target.value);
+                          checkFormCompletion();
+                        }}
                         className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                         pattern=".{0,100}"
                         title="El correo electrónico debe tener máximo 100 caracteres."
@@ -337,7 +363,10 @@ const UserTable = () => {
                         type="text"
                         placeholder="Teléfono"
                         value={updatePhone}
-                        onChange={(e) => setUpdatePhone(e.target.value)}
+                        onChange={(e) => {
+                          setUpdatePhone(e.target.value);
+                          checkFormCompletion();
+                        }}
                         className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
 
@@ -348,15 +377,31 @@ const UserTable = () => {
                         type="date"
                         placeholder="Fecha de nacimiento"
                         value={updateBirthDate}
-                        onChange={(e) => setUpdateBirthDate(e.target.value)}
+                        onChange={(e) => {
+                          setUpdateBirthDate(e.target.value);
+                          checkFormCompletion();
+                        }}
                         className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
+                      <input
+                        type="textarea"
+                        placeholder="Ingrese su comentario"
+                        value={updateComment}
+                        onChange={(e) => {
+                          setUpdateComment(e.target.value);
+                          checkFormCompletion();
+                        }}
+                        className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      ></input>
 
                       <label className="flex items-center mb-4">
                         <input
                           type="checkbox"
                           checked={updateIsAdmin}
-                          onChange={(e) => setUpdateIsAdmin(e.target.checked)}
+                          onChange={(e) => {
+                            setUpdateIsAdmin(e.target.checked);
+                            checkFormCompletion();
+                          }}
                           className="mr-2 leading-tight"
                         />
                         <span className="text-sm">Es administrador</span>
@@ -379,9 +424,11 @@ const UserTable = () => {
                             updateEmail,
                             updatePhone,
                             updateBirthDate,
-                            updateIsAdmin
+                            updateIsAdmin,
+                            updateComment
                           )
                         }
+                        disabled={!isFormComplete}
                       >
                         Actualizar
                       </button>
@@ -483,6 +530,9 @@ const UserTable = () => {
                         ) : (
                           ""
                         )}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {user.comment}
                       </td>
                     </tr>
                   );
