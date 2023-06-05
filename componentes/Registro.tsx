@@ -77,16 +77,17 @@ const Registro = (props: any) => {
   
 
   return (
+    
     <div className="container mx-auto max-w-sm">
   
-        <div>
+        
           <h2 className="text-2xl font-bold mb-4">
             ¿Aún no tienes una cuenta?
           </h2>
           <h5 className="text-lg mb-4">
             Regístrate y empieza a ver contenido ya!
           </h5>
-        </div>
+        
       
       <form onSubmit={handleSubmit}>
         <input
